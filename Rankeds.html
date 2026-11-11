@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Ranked - Dead by Daylight Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --panel-bg: rgba(16, 16, 20, 0.95);
+            --border-chalk: rgba(220, 220, 220, 0.25);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --ash-color: #9ca3af;
+            --bronze-color: #cd7f32;
+            --silver-color: #e5e7eb;
+            --gold-color: #f59e0b;
+            --iri-color: #ef4444;
+            --ranger-color: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rajdhani', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            background-image: radial-gradient(circle at center, #1a1a24 0%, #050507 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* HEADER RANK DISPLAY */
+        .rank-card {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-chalk);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+            filter: drop-shadow(0 0 12px rgba(0,0,0,0.9));
+        }
+
+        .rank-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .rank-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        /* FRAGMENTOS */
+        .fragments-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .fragment-diamond {
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            border: 2px solid #334155;
+            background: #0f172a;
+            transition: all 0.3s ease;
+        }
+
+        .fragment-diamond.active {
+            box-shadow: 0 0 12px currentColor;
+        }
+
+        /* PANELES */
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-chalk);
+            padding: 16px;
+        }
+
+        .panel-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            border-bottom: 1px dashed var(--border-chalk);
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* MATERIAS */
+        .subject-card {
+            background: rgba(10, 10, 12, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .subject-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #f8fafc;
+        }
+
+        .counters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .counter-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .counter-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            background: #09090b;
+            border: 1px solid #27272a;
+        }
+
+        .btn-step {
+            width: 28px;
+            height: 32px;
+            background: #18181b;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-step:active {
+            background: #3f3f46;
+        }
+
+        .counter-value {
+            flex: 1;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* BOTONES */
+        .btn-main {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+            border: 1px solid #991b1b;
+            color: #fef2f2;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-main:active {
+            transform: scale(0.99);
+        }
+
+        .resets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-reset {
+            padding: 8px;
+            background: #18181b;
+            border: 1px solid #27272a;
+            color: #9ca3af;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* MODAL EMERGENTE */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: #121216;
+            border: 2px solid #ef4444;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .eval-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .eval-table th, .eval-table td {
+            border: 1px solid #27272a;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .eval-table th {
+            background: #18181b;
+            color: var(--text-muted);
+        }
+
+        .stars-cell {
+            color: #f59e0b;
+            text-align: center !important;
+            letter-spacing: 2px;
+        }
+
+        .eval-result-box {
+            padding: 10px;
+            background: rgba(127, 29, 29, 0.2);
+            border: 1px solid #7f1d1d;
+            text-align: center;
+            font-weight: 700;
+            color: #fca5a5;
+            font-size: 0.9rem;
+        }
+
+        .btn-close-modal {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+        }
+
+        @keyframes glowPulse {
+            0% { filter: drop-shadow(0 0 4px #ef4444); }
+            50% { filter: drop-shadow(0 0 16px #ef4444); }
+            100% { filter: drop-shadow(0 0 4px #ef4444); }
+        }
+
+        @keyframes rangerPulse {
+            0% { filter: drop-shadow(0 0 6px #3b82f6); }
+            50% { filter: drop-shadow(0 0 20px #60a5fa); }
+            100% { filter: drop-shadow(0 0 6px #3b82f6); }
+        }
+
+        .glow-iri { animation: glowPulse 2s infinite; }
+        .glow-ranger { animation: rangerPulse 2s infinite; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER DE RANGO -->
+    <div class="rank-card">
+        <div class="badge-container" id="badgeSvg"></div>
+        <div class="rank-name" id="rankName">CENIZA IV</div>
+        <div class="rank-subtitle" id="rankCategory">CLASIFICACIÓN ACADÉMICA</div>
+
+        <div class="fragments-bar" id="fragmentsBar"></div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);" id="fragText">0 / 3 Fragmentos</div>
+    </div>
+
+    <!-- LISTA DE MATERIAS -->
+    <div class="panel">
+        <div class="panel-title">
+            <span>MATERIAS OFICIALES</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">SEMANA ACTUAL</span>
+        </div>
+        <div id="subjectsList"></div>
+        <button class="btn-main" onclick="evaluarSemana()">EVALUAR SEMANA</button>
+    </div>
+
+    <!-- REINICIOS -->
+    <div class="panel">
+        <div class="panel-title">GESTIÓN DE CICLO</div>
+        <div class="resets-grid">
+            <button class="btn-reset" onclick="resetParcial()">REINICIAR PARCIAL</button>
+            <button class="btn-reset" onclick="resetSemestre()">REINICIAR SEMESTRE</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- VENTANA EMERGENTE (MODAL) DE RESULTADOS -->
+<div class="modal-overlay" id="evalModal">
+    <div class="modal-content">
+        <div style="font-family:'Cinzel', serif; font-size:1.1rem; color:#f87171; border-bottom:1px dashed #3f3f46; padding-bottom:6px;">
+            REPORTE ESTELAR SEMANAL
+        </div>
+        <table class="eval-table">
+            <thead>
+                <tr>
+                    <th>Materia</th>
+                    <th style="text-align: center;">Estrellas</th>
+                </tr>
+            </thead>
+            <tbody id="evalTableBody"></tbody>
+        </table>
+        <div class="eval-result-box" id="evalSummaryMsg"></div>
+        <button class="btn-close-modal" onclick="cerrarModal()">ACEPTAR Y LIMPIAR SEMANA</button>
+    </div>
+</div>
+
+<script>
+    const SVG_BADGES = {
+        ash: `<svg viewBox="0 0 100 100" class="badge-svg"><polygon points="50,2 93,22 88,78 50,98 12,78 7,22" fill="#111" stroke="#6b7280" stroke-width="5" stroke-dasharray="6,2"/><polygon points="50,12 80,28 75,72 50,88 25,72 20,28" fill="#18181b" stroke="#4b5563" stroke-width="2"/><path d="M12,22 L2,10 M88,78 L98,90 M12,78 L2,90 M88,22 L98,10" stroke="#6b7280" stroke-width="3"/><circle cx="50" cy="50" r="16" fill="#09090b" stroke="#9ca3af" stroke-width="3"/></svg>`,
+        bronze: `<svg viewBox="0 0 100 100" class="badge-svg"><polygon points="50,0 96,25 86,85 50,100 14,85 4,25" fill="#201107" stroke="#cd7f32" stroke-width="5"/><polygon points="50,10 84,28 76,78 50,90 24,78 16,28" fill="#2d1a0e" stroke="#b45309" stroke-width="3"/><path d="M50,90 L40,105 M50,90 L60,105 M4,25 L-4,18 M96,25 L104,18" stroke="#cd7f32" stroke-width="4"/><polygon points="50,32 68,58 50,75 32,58" fill="#cd7f32" stroke="#452209" stroke-width="2"/></svg>`,
+        silver: `<svg viewBox="0 0 100 100" class="badge-svg"><polygon points="50,0 98,20 82,82 50,100 18,82 2,20" fill="#0f172a" stroke="#cbd5e1" stroke-width="5"/><path d="M50,0 L58,15 L42,15 Z M98,20 L85,30 L92,12 Z M2,20 L15,30 L8,12 Z" fill="#94a3b8"/><path d="M18,82 L10,95 M82,82 L90,95" stroke="#cbd5e1" stroke-width="4"/><polygon points="50,22 76,50 50,82 24,50" fill="#cbd5e1" stroke="#475569" stroke-width="3"/><polygon points="50,35 60,50 50,68 40,50" fill="#1e293b"/></svg>`,
+        gold: `<svg viewBox="0 0 100 100" class="badge-svg"><polygon points="50,0 95,18 98,72 50,100 2,72 5,18" fill="#261702" stroke="#f59e0b" stroke-width="5"/><path d="M50,0 L65,-5 L70,15 Z M50,0 L35,-5 L30,15 Z M95,18 L108,25 L98,40 Z M5,18 L-8,25 L2,40 Z" fill="#fbbf24"/><circle cx="50" cy="50" r="24" fill="#451a03" stroke="#f59e0b" stroke-width="4"/><polygon points="50,28 65,48 50,72 35,48" fill="#fef08a" stroke="#d97706" stroke-width="2"/></svg>`,
+        iri: `<svg viewBox="0 0 100 100" class="badge-svg glow-iri"><polygon points="50,0 100,22 88,88 50,100 12,88 0,22" fill="#2d0606" stroke="#ef4444" stroke-width="5"/><path d="M50,100 L62,85 L38,85 Z M100,22 L82,32 L92,15 Z M0,22 L18,32 L8,15 Z M50,0 L42,12 L58,12 Z" fill="#dc2626"/><polygon points="50,18 82,50 50,85 18,50" fill="#7f1d1d" stroke="#fca5a5" stroke-width="3"/><circle cx="50" cy="50" r="12" fill="#fef2f2"/></svg>`,
+        ranger: `<svg viewBox="0 0 100 100" class="badge-svg glow-ranger"><polygon points="50,0 92,16 84,76 50,100 16,76 8,16" fill="#090d16" stroke="#3b82f6" stroke-width="5"/><path d="M50,0 L58,-8 L65,12 Z M50,0 L42,-8 L35,12 Z M92,16 L108,22 L96,38 Z M8,16 L-8,22 L4,38 Z M84,76 L96,92 L78,88 Z M16,76 L4,92 L22,88 Z" fill="#60a5fa"/><path d="M30,30 L70,30 L78,55 L50,85 L22,55 Z" fill="#1e3a8a" stroke="#93c5fd" stroke-width="3"/><rect x="36" y="38" width="28" height="10" fill="#bfdbfe"/><polygon points="50,12 62,28 38,28" fill="#3b82f6"/></svg>`
+    };
+
+    const RANKS = [
+        { name: "CENIZA IV", svg: SVG_BADGES.ash, maxFrag: 3, color: "var(--ash-color)" },
+        { name: "CENIZA III", svg: SVG_BADGES.ash, maxFrag: 3, color: "var(--ash-color)" },
+        { name: "CENIZA II", svg: SVG_BADGES.ash, maxFrag: 3, color: "var(--ash-color)" },
+        { name: "CENIZA I", svg: SVG_BADGES.ash, maxFrag: 3, color: "var(--ash-color)" },
+        { name: "BRONCE IV", svg: SVG_BADGES.bronze, maxFrag: 4, color: "var(--bronze-color)" },
+        { name: "BRONCE III", svg: SVG_BADGES.bronze, maxFrag: 4, color: "var(--bronze-color)" },
+        { name: "BRONCE II", svg: SVG_BADGES.bronze, maxFrag: 4, color: "var(--bronze-color)" },
+        { name: "BRONCE I", svg: SVG_BADGES.bronze, maxFrag: 4, color: "var(--bronze-color)" },
+        { name: "PLATA III", svg: SVG_BADGES.silver, maxFrag: 5, color: "var(--silver-color)" },
+        { name: "PLATA II", svg: SVG_BADGES.silver, maxFrag: 5, color: "var(--silver-color)" },
+        { name: "PLATA I", svg: SVG_BADGES.silver, maxFrag: 5, color: "var(--silver-color)" },
+        { name: "ORO III", svg: SVG_BADGES.gold, maxFrag: 5, color: "var(--gold-color)" },
+        { name: "ORO II", svg: SVG_BADGES.gold, maxFrag: 5, color: "var(--gold-color)" },
+        { name: "ORO I", svg: SVG_BADGES.gold, maxFrag: 5, color: "var(--gold-color)" },
+        { name: "IRIDISCENTE III", svg: SVG_BADGES.iri, maxFrag: 6, color: "var(--iri-color)" },
+        { name: "IRIDISCENTE II", svg: SVG_BADGES.iri, maxFrag: 6, color: "var(--iri-color)" },
+        { name: "IRIDISCENTE I", svg: SVG_BADGES.iri, maxFrag: 6, color: "var(--iri-color)" },
+        { name: "RANGER", svg: SVG_BADGES.ranger, maxFrag: 7, color: "var(--ranger-color)" }
+    ];
+
+    const DEFAULT_SUBJECTS = [
+        "Pensamiento filosófico",
+        "Matemáticas",
+        "Lengua",
+        "Ciencias",
+        "Ciencias Sociales",
+        "Formación Socioemocional",
+        "Inglés",
+        "Cultura Digital"
+    ];
+
+    let state = JSON.parse(localStorage.getItem('dbd_ranked_v5')) || {
+        rankIdx: 0,
+        fragments: 0,
+        subjects: DEFAULT_SUBJECTS.map(name => ({ name, tHechas: 0, tTotales: 0, aTuviste: 0, aTotales: 0 }))
+    };
+
+    let pendingNextRankIdx = 0;
+    let pendingNextFragments = 0;
+
+    function save() {
+        localStorage.setItem('dbd_ranked_v5', JSON.stringify(state));
+        render();
+    }
+
+    function render() {
+        const rank = RANKS[state.rankIdx];
+        document.getElementById('badgeSvg').innerHTML = rank.svg;
+        document.getElementById('rankName').innerText = rank.name;
+        document.getElementById('rankName').style.color = rank.color;
+
+        const fragBar = document.getElementById('fragmentsBar');
+        fragBar.innerHTML = '';
+        for (let i = 0; i < rank.maxFrag; i++) {
+            const diamond = document.createElement('div');
+            diamond.className = `fragment-diamond ${i < state.fragments ? 'active' : ''}`;
+            if (i < state.fragments) {
+                diamond.style.backgroundColor = rank.color;
+                diamond.style.borderColor = rank.color;
+            }
+            fragBar.appendChild(diamond);
+        }
+        document.getElementById('fragText').innerText = `${state.fragments} / ${rank.maxFrag} Fragmentos para avanzar`;
+
+        const list = document.getElementById('subjectsList');
+        list.innerHTML = '';
+        state.subjects.forEach((sub, idx) => {
+            list.innerHTML += `
+                <div class="subject-card">
+                    <div class="subject-title">${sub.name}</div>
+                    <div class="counters-grid">
+                        <div class="counter-box">
+                            <span class="counter-label">Trabajos (Hechos / Total)</span>
+                            <div class="counter-controls">
+                                <button class="btn-step" onclick="changeVal(${idx}, 'tHechas', -1)">-</button>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'tTotales', -1)">-T</button>
+                                <span class="counter-value">${sub.tHechas} / ${sub.tTotales}</span>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'tHechas', 1)">+</button>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'tTotales', 1)">+T</button>
+                            </div>
+                        </div>
+                        <div class="counter-box">
+                            <span class="counter-label">Asistencia (Asistió / Total)</span>
+                            <div class="counter-controls">
+                                <button class="btn-step" onclick="changeVal(${idx}, 'aTuviste', -1)">-</button>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'aTotales', -1)">-T</button>
+                                <span class="counter-value">${sub.aTuviste} / ${sub.aTotales}</span>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'aTuviste', 1)">+</button>
+                                <button class="btn-step" onclick="changeVal(${idx}, 'aTotales', 1)">+T</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function changeVal(idx, key, delta) {
+        state.subjects[idx][key] = Math.max(0, state.subjects[idx][key] + delta);
+        save();
+    }
+
+    function evaluarSemana() {
+        let totalStars = 0;
+        const tbody = document.getElementById('evalTableBody');
+        tbody.innerHTML = '';
+
+        state.subjects.forEach(sub => {
+            let tRatio = sub.tTotales > 0 ? (sub.tHechas / sub.tTotales) : 1;
+            let aRatio = sub.aTotales > 0 ? (sub.aTuviste / sub.aTotales) : 1;
+            let scorePct = (tRatio * 0.7) + (aRatio * 0.3);
+
+            let stars = 1;
+            if (scorePct >= 0.9) stars = 5;
+            else if (scorePct >= 0.75) stars = 4;
+            else if (scorePct >= 0.6) stars = 3;
+            else if (scorePct >= 0.4) stars = 2;
+
+            totalStars += stars;
+
+            let starStr = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+            tbody.innerHTML += `
+                <tr>
+                    <td>${sub.name}</td>
+                    <td class="stars-cell">${starStr}</td>
+                </tr>
+            `;
+        });
+
+        let avgStars = totalStars / state.subjects.length;
+        let deltaFrag = 0;
+        let maxGain = (state.rankIdx === RANKS.length - 1) ? 2 : 3;
+
+        // Cálculo de castigos escalados según el rango actual
+        // Rango 0-3 (Ceniza): -1 a -2 | 4-7 (Bronce): -1 a -2 | 8-10 (Plata): -2 a -3 | 11-13 (Oro): -2 a -3 | 14-16 (Iridiscente): -3 a -4 | 17 (Ranger): -4 a -5
+        let penaltyTier1 = -1;
+        let penaltyTier2 = -2;
+        if (state.rankIdx >= 4 && state.rankIdx <= 7) { penaltyTier1 = -1; penaltyTier2 = -2; }
+        else if (state.rankIdx >= 8 && state.rankIdx <= 10) { penaltyTier1 = -2; penaltyTier2 = -3; }
+        else if (state.rankIdx >= 11 && state.rankIdx <= 13) { penaltyTier1 = -2; penaltyTier2 = -3; }
+        else if (state.rankIdx >= 14 && state.rankIdx <= 16) { penaltyTier1 = -3; penaltyTier2 = -4; }
+        else if (state.rankIdx >= 17) { penaltyTier1 = -4; penaltyTier2 = -5; }
+
+        if (avgStars >= 4.5) deltaFrag = maxGain;
+        else if (avgStars >= 3.8) deltaFrag = 1;
+        else if (avgStars >= 3.0) deltaFrag = 0;
+        else if (avgStars >= 2.0) deltaFrag = penaltyTier1;
+        else deltaFrag = penaltyTier2;
+
+        let tempFragments = state.fragments + deltaFrag;
+        let tempRankIdx = state.rankIdx;
+        let currentMax = RANKS[tempRankIdx].maxFrag;
+        let msg = "";
+
+        if (deltaFrag > 0) msg = `¡Semana destacada! Obtienes +${deltaFrag} Fragmento(s).`;
+        else if (deltaFrag === 0) msg = "Rendimiento promedio. Mantienes tus fragmentos.";
+        else msg = `¡Penalización severa por alto rango! Pierdes ${Math.abs(deltaFrag)} Fragmento(s).`;
+
+        if (tempFragments >= currentMax) {
+            if (tempRankIdx < RANKS.length - 1) {
+                tempRankIdx++;
+                tempFragments = 0;
+                msg += ` ¡ASCENDISTE A ${RANKS[tempRankIdx].name}!!`;
+            } else {
+                tempFragments = currentMax;
+            }
+        } else if (tempFragments < 0) {
+            if (tempRankIdx > 0) {
+                tempRankIdx--;
+                tempFragments = RANKS[tempRankIdx].maxFrag - 1;
+                msg += ` ¡DEGRADADO A ${RANKS[tempRankIdx].name}!`;
+            } else {
+                tempFragments = 0;
+            }
+        }
+
+        pendingNextRankIdx = tempRankIdx;
+        pendingNextFragments = tempFragments;
+
+        document.getElementById('evalSummaryMsg').innerText = msg;
+        document.getElementById('evalModal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        state.rankIdx = pendingNextRankIdx;
+        state.fragments = pendingNextFragments;
+        state.subjects.forEach(sub => {
+            sub.tHechas = 0;
+            sub.tTotales = 0;
+            sub.aTuviste = 0;
+            sub.aTotales = 0;
+        });
+
+        document.getElementById('evalModal').style.display = 'none';
+        save();
+    }
+
+    function resetParcial() {
+        if (confirm("¿Confirmar reinicio de Parcial? Reducirá tu división según tu rango actual.")) {
+            if (state.rankIdx >= 17) state.rankIdx = 11;
+            else if (state.rankIdx >= 14) state.rankIdx = 8;
+            else if (state.rankIdx >= 11) state.rankIdx = 4;
+            else state.rankIdx = 0;
+            state.fragments = 0;
+            save();
+        }
+    }
+
+    function resetSemestre() {
+        if (confirm("¿Confirmar reinicio de Semestre? Volverás al rango Ceniza IV.")) {
+            state.rankIdx = 0;
+            state.fragments = 0;
+            save();
+        }
+    }
+
+    render();
+</script>
+</body>
+</html>
